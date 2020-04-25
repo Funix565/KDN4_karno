@@ -16,5 +16,13 @@ int main(int argc, char *argv[])
     int salo = 8;
     qDebug() << salo;
 
+    // LARGE COMMENT AHAHAH
+    // GIT IS NOT EASY
+
     return a.exec();
+}
+
+void save (int a)
+{
+    return a % 2; // new func
 }
