@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include <iostream>
 using namespace std;
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -11,5 +12,9 @@ int main(int argc, char *argv[])
     w.show();
     int b;
     cin >> b;
+
+    int salo = 8;
+    qDebug() << salo;
+
     return a.exec();
 }
