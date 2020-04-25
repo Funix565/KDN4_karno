@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += widgets
 
 TARGET = KDM4_Karno
 TEMPLATE = app
