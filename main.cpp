@@ -13,12 +13,6 @@ int main(int argc, char *argv[])
     int b;
     cin >> b;
 
-    int salo = 8;
-    qDebug() << salo;
-
-    // LARGE COMMENT AHAHAH
-    // GIT IS NOT EASY
-
     return a.exec();
 }
 
