@@ -4,6 +4,7 @@
 #include <QTableWidget>
 #include <cmath>
 #include <deque>
+#include <QMessageBox>
 using namespace  std;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -20,12 +21,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_checkBox_2var_stateChanged(int arg1) {
 
-   ui->tableWidget_ist->setRowCount(8);
-   ui->tableWidget_ist->setColumnCount(4);
-   char str[3] = {'A', 'B', 'C'};
-   QStringList headersClmn;
-   QStringList headersRow;
-   for (int i = 0; i < ui->tableWidget_ist->rowCount(); i++)
+    ui->tableWidget_ist->setRowCount(8);
+    ui->tableWidget_ist->setColumnCount(4);
+    char str[3] = {'A', 'B', 'C'};
+    QStringList headersClmn;
+    QStringList headersRow;
+    for (int i = 0; i < ui->tableWidget_ist->rowCount(); i++)
     {
         ui->tableWidget_ist->setVerticalHeaderLabels(headersRow << QString::number(i)); // строки
     }
@@ -138,5 +139,55 @@ void MainWindow::on_checkBox_2var_stateChanged(int arg1) {
     item_1->setTextAlignment(Qt::AlignCenter);
     item_1->setText("1");
     ui->tableWidget_karno->setItem(3, 1, item_1);
-    //deque<QString> deq;
+}
+
+void MainWindow::on_pushButton_map_carno_clicked()
+{
+    int i = 3;
+    for (int j = 0; j < ui->tableWidget_ist->rowCount(); j++) {
+        QTableWidgetItem *item_tabl_ist(ui->tableWidget_ist->item(j,i));
+        if(!item_tabl_ist) {         // проверка на заполнение
+            QMessageBox::warning(this, "Warning", "You haven't filled the last column!");
+            return;
+        }
+    }
+    QString str_ist;
+    QString karno;
+    int column_karno = 2, row_karno = 2;
+    for (int i = 0; i < ui->tableWidget_ist->rowCount(); i++) {
+        str_ist = "";
+        for (int j = 0; j < ui->tableWidget_ist->columnCount(); j++) {
+            if (j == ui->tableWidget_ist->columnCount() - 1) {
+                karno = ui->tableWidget_ist->item(i, j)->text();
+            }
+            else {
+                str_ist += ui->tableWidget_ist->item(i,j)->text();
+            }
+        }
+        QTableWidgetItem *k = new QTableWidgetItem;
+        if (karno == '1') {
+            k->setText("1");
+            if (column_karno == 4)
+                ui->tableWidget_karno->setItem(row_karno, column_karno + 1, k);
+            else if (column_karno == 5) {
+                 ui->tableWidget_karno->setItem(row_karno, column_karno - 1, k);
+            }
+            else
+                ui->tableWidget_karno->setItem(row_karno, column_karno, k);
+            row_karno++;
+            row_karno == 4 ? row_karno = 2, column_karno++ : true;
+        }
+        if (karno == '0') {
+            k->setText("0");
+            if (column_karno == 4)
+                ui->tableWidget_karno->setItem(row_karno, column_karno + 1, k);
+            else if (column_karno == 5) {
+                ui->tableWidget_karno->setItem(row_karno, column_karno - 1, k);
+            }
+            else
+                ui->tableWidget_karno->setItem(row_karno, column_karno, k);
+            row_karno++;
+            row_karno == 4 ? row_karno = 2, column_karno++ : true;
+        }
+    }
 }
