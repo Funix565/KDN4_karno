@@ -7,6 +7,8 @@
 QT       += core gui
 QT   += widgets
 
+CONFIG += c++11
+
 TARGET = KDM4_Karno
 TEMPLATE = app
 
@@ -18,3 +20,4 @@ HEADERS  += mainwindow.h \
     header.h
 
 FORMS    += mainwindow.ui
+

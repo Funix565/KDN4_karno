@@ -5,7 +5,17 @@
 #include <cmath>
 #include <deque>
 #include <QMessageBox>
+#include <map>
+
+#include <header.h>
+
+
+
+#include <QDebug>
 using namespace  std;
+
+//Indexes position = {{0, {0, 0}}};
+std::map <int, char> m = {{1, 'a'}, {3, 'b'}};
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -20,6 +30,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::on_checkBox_2var_stateChanged(int arg1) {
+
 
     ui->tableWidget_ist->setRowCount(8);
     ui->tableWidget_ist->setColumnCount(4);
@@ -65,8 +76,8 @@ void MainWindow::on_checkBox_2var_stateChanged(int arg1) {
         coef = pow(2.0, (double)pov);
         pov++;
     }
-    ui->tableWidget_ist->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents); // блокировка для редактирования столбцов
-    ui->tableWidget_ist->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);   // блокировка для редактирования рядов
+    //ui->tableWidget_ist->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents); // блокировка для редактирования столбцов
+    //ui->tableWidget_ist->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);   // блокировка для редактирования рядов
     ui->tableWidget_ist->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->tableWidget_ist->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     int w = ui->tableWidget_ist->verticalHeader()->width() +4;                                      // считаем размер окна для таблицы (+4 нужно!)
@@ -87,11 +98,12 @@ void MainWindow::on_checkBox_2var_stateChanged(int arg1) {
     ui->tableWidget_karno->setSpan(2,0,2,1);
     ui->tableWidget_karno->setSpan(0,2,1,4);
 
+
     ui->tableWidget_karno->verticalHeader()->hide();
     ui->tableWidget_karno->horizontalHeader()->hide();
     ui->tableWidget_karno->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->tableWidget_karno->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents); // блокировка для редактирования столбцов
-    ui->tableWidget_karno->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);   // блокировка для редактирования рядов
+    //ui->tableWidget_karno->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents); // блокировка для редактирования столбцов
+    //ui->tableWidget_karno->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);   // блокировка для редактирования рядов
     ui->tableWidget_karno->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->tableWidget_karno->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     w = ui->tableWidget_karno->verticalHeader()->width() +4;                                      // считаем размер окна для таблицы (+4 нужно!)
@@ -165,7 +177,7 @@ void MainWindow::on_pushButton_map_carno_clicked()
             }
         }
         QTableWidgetItem *k = new QTableWidgetItem;
-        if (karno == '1') {
+        if (karno == "1") {
             k->setText("1");
             if (column_karno == 4)
                 ui->tableWidget_karno->setItem(row_karno, column_karno + 1, k);
@@ -177,7 +189,7 @@ void MainWindow::on_pushButton_map_carno_clicked()
             row_karno++;
             row_karno == 4 ? row_karno = 2, column_karno++ : true;
         }
-        if (karno == '0') {
+        if (karno == "0") {
             k->setText("0");
             if (column_karno == 4)
                 ui->tableWidget_karno->setItem(row_karno, column_karno + 1, k);
@@ -191,3 +203,139 @@ void MainWindow::on_pushButton_map_carno_clicked()
         }
     }
 }
+
+
+
+
+
+
+
+void MainWindow::on_pushButton_Build_clicked()
+{
+    ui->tableWidget_ist->clear();
+    ui->tableWidget_karno->clear();
+
+    int varCnt;
+    if (ui->radioButton_2vars->isChecked())
+    {
+        varCnt = 2;
+    }
+    if (ui->radioButton_3vars->isChecked())
+    {
+        varCnt = 3;
+    }
+    if (ui->radioButton_4vars->isChecked())
+    {
+        varCnt = 4;
+    }
+
+    ui->tableWidget_ist->setRowCount(pow(2.0, varCnt));
+    ui->tableWidget_ist->setColumnCount(varCnt + 1);
+    char str[4] = {'A', 'B', 'C', 'D'};
+
+    QStringList headersClmn;
+    QStringList headersRow;
+
+    for (int i = 0; i < ui->tableWidget_ist->rowCount(); i++)
+    {
+        ui->tableWidget_ist->setVerticalHeaderLabels(headersRow << QString::number(i));
+    }
+    for (int j = 0; j < ui->tableWidget_ist->columnCount() - 1; j++)
+    {
+        ui->tableWidget_ist->setHorizontalHeaderLabels(headersClmn << (QString)str[j]);
+    }
+
+    switch (varCnt)
+    {
+    case 2:
+        {
+            ui->tableWidget_ist->setHorizontalHeaderLabels(headersClmn << "F(AB)");
+        }
+        break;
+    case 3:
+        {
+            ui->tableWidget_ist->setHorizontalHeaderLabels(headersClmn << "F(ABC)");
+        }
+        break;
+    case 4:
+        {
+            ui->tableWidget_ist->setHorizontalHeaderLabels(headersClmn << "F(ABCD)");
+        }
+        break;
+    }
+
+    // Заполнение нулями и единиицами
+    int zeros = pow(2.0, (double)varCnt);
+    int coef = 1;   // количесвто выводов
+    int pov = 1;    // начальная степень
+
+    for (int i = 0; i < varCnt; i++) // столбцы
+    {
+        int row = 0;
+        for (int k = 0; k < coef; k++) // строки
+        {
+            int j;
+            for (j = 0; j < zeros / 2; j++)
+            {
+                QTableWidgetItem *zero = new QTableWidgetItem (QObject::tr("%1").arg(0));
+                zero->setFlags(Qt::ItemIsEnabled);
+                ui->tableWidget_ist->setItem(row, i, zero);
+                row++;
+            }
+            for ( ; j < zeros; j++)
+            {
+                QTableWidgetItem *one = new QTableWidgetItem (QObject::tr("%1").arg(1));
+                one->setFlags(Qt::ItemIsEnabled);
+                ui->tableWidget_ist->setItem(row, i, one);
+                row++;
+            }
+        }
+        zeros = zeros / 2;  // уменьшение количества нулей в столбце вдвое
+        coef = pow(2.0, (double)pov);
+        pov++;
+    }
+
+    //ui->tableWidget_ist->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents); // блокировка для редактирования столбцов
+    //ui->tableWidget_ist->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);   // блокировка для редактирования рядов
+    ui->tableWidget_ist->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->tableWidget_ist->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    int w = ui->tableWidget_ist->verticalHeader()->width() +4;                                      // считаем размер окна для таблицы (+4 нужно!)
+    for (int i = 0; i < ui->tableWidget_ist->columnCount(); i++)                                    // считаем ширину
+    {
+        w += ui->tableWidget_ist->columnWidth(i);
+    }
+    int h = ui->tableWidget_ist->horizontalHeader()->height() + 4;
+    for (int i = 0; i < ui->tableWidget_ist->rowCount(); i++)                                       // считаем высоту
+    {
+        h += ui->tableWidget_ist->rowHeight(i);
+    }
+    QSize p = QSize(w, h);
+    ui->tableWidget_ist->setFixedSize(p);
+
+    //BuildCarno();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
