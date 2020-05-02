@@ -3,17 +3,17 @@
 #include <map>
 #include <mainwindow.h>
 
-void BuildKarnaugh(Ui::MainWindow *ui);
+void BuildKarnaugh(Ui::MainWindow *ui); // для построения карты
 
-typedef struct Coord
+typedef struct Coord // тип структуры для строк и столбцов
 {
     int row;
     int column;
 } TCoord;
 
-typedef std::map <int, TCoord> Indexes;
+typedef std::map <int, TCoord> Indexes; // тип для словаря НОМЕР - КОРД-Ы
 
-Indexes coordinates34 = {{ 0,  {2, 2} },
+Indexes coordinates34 = {{ 0,  {2, 2} }, // для 3х, 4х переменных
                         { 1,  {2, 3} },
                         { 3,  {2, 4} },
                         { 2,  {2, 5} },
@@ -30,11 +30,10 @@ Indexes coordinates34 = {{ 0,  {2, 2} },
                         { 11, {5, 4} },
                         { 10, {5, 5} }};
 
-Indexes coordinates2 = {{ 0, {2, 2} },
+Indexes coordinates2 = {{ 0, {2, 2} }, // для 2х
                         { 1, {2, 3} },
                         { 2, {3, 2} },
                         { 3, {3, 3} }};
-// same for coord2VARS
 
 
 #endif // HEADER_H

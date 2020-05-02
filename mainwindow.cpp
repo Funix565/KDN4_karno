@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // connect'ы кружочков
     connect(ui->radioButton_2vars, SIGNAL(clicked()), this, SLOT(ChosenRadio()));
     connect(ui->radioButton_3vars, SIGNAL(clicked()), this, SLOT(ChosenRadio()));
     connect(ui->radioButton_4vars, SIGNAL(clicked()), this, SLOT(ChosenRadio()));
@@ -36,8 +37,9 @@ void MainWindow::ChosenRadio() // построение таблицы по выбору кружочка
 
     int varCnt;
 
-    QRadioButton *rb = (QRadioButton *)sender();
+    QRadioButton *rb = (QRadioButton *)sender(); // от connect'a
 
+    // проверка текста кнопки, для того, чтобы знать, сколько переменных
     if (rb->text() == "2vars")
     {
         varCnt = 2;
@@ -51,22 +53,26 @@ void MainWindow::ChosenRadio() // построение таблицы по выбору кружочка
         varCnt = 4;
     }
 
+    // Таблица истинности
     ui->tableWidget_ist->setRowCount(pow(2.0, varCnt));
     ui->tableWidget_ist->setColumnCount(varCnt + 1);
-    char str[4] = {'A', 'B', 'C', 'D'};
+    char str[4] = {'A', 'B', 'C', 'D'}; // заголовки переменных
 
     QStringList headersClmn;
     QStringList headersRow;
 
+    // Заполнение вертикальных заголовков числами
     for (int i = 0; i < ui->tableWidget_ist->rowCount(); i++)
     {
         ui->tableWidget_ist->setVerticalHeaderLabels(headersRow << QString::number(i));
     }
+    // заполнение горизонтальных заголовков переменными
     for (int j = 0; j < ui->tableWidget_ist->columnCount() - 1; j++)
     {
         ui->tableWidget_ist->setHorizontalHeaderLabels(headersClmn << (QString)str[j]);
     }
 
+    // Условие на заполнение последней колонки - ИМЯ ФУНКЦИИ
     switch (varCnt)
     {
     case 2:
@@ -117,8 +123,8 @@ void MainWindow::ChosenRadio() // построение таблицы по выбору кружочка
             pov++;
         }
 
-        ui->tableWidget_ist->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents); // блокировка для редактирования столбцов
-        ui->tableWidget_ist->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);   // блокировка для редактирования рядов
+        ui->tableWidget_ist->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents); // блокировка для редактирования размера столбцов
+        ui->tableWidget_ist->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);   // блокировка для редактирования размера рядов
         ui->tableWidget_ist->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         ui->tableWidget_ist->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         int w = ui->tableWidget_ist->verticalHeader()->width() +4;                                      // считаем размер окна для таблицы (+4 нужно!)
@@ -137,6 +143,7 @@ void MainWindow::ChosenRadio() // построение таблицы по выбору кружочка
 
 void MainWindow::on_pushButton_Build_clicked()
 {
+    // Проверка на заполнение последней колонки
     ui->tableWidget_karno->clear();
     for (int j = 0, i = (ui->tableWidget_ist->columnCount() - 1); j < ui->tableWidget_ist->rowCount(); j++)
     {
@@ -155,6 +162,7 @@ void MainWindow::on_pushButton_Build_clicked()
     ui->tableWidget_karno->verticalHeader()->hide();
     ui->tableWidget_karno->horizontalHeader()->hide();
 
+    // Построение карты карно
     switch(clmns)
     {
     case 2:
@@ -321,18 +329,20 @@ void MainWindow::on_pushButton_Build_clicked()
         break;
     }
 
+    // Заполнение карты карно
     for (int r = 0; r < rows; r++)
     {
         QTableWidgetItem *itm = ui->tableWidget_ist->item(r, clmns);
         QTableWidgetItem *inKarnaugh = new QTableWidgetItem (*itm);
+        // получаем номер строки в табл истинности. Находим его в словаре. Получаем номера ячеек для Карно
         int r_k = coordinates[r].row;
         int c_k = coordinates[r].column;
 
         ui->tableWidget_karno->setItem(r_k, c_k, inKarnaugh);
     }
 
-    ui->tableWidget_karno->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents); // блокировка для редактирования столбцов
-    ui->tableWidget_karno->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);   // блокировка для редактирования рядов
+    ui->tableWidget_karno->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents); // блокировка для редактирования размера столбцов
+    ui->tableWidget_karno->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);   // блокировка для редактирования размера рядов
     ui->tableWidget_karno->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->tableWidget_karno->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     int w = ui->tableWidget_karno->verticalHeader()->width() +4;                                      // считаем размер окна для таблицы (+4 нужно!)

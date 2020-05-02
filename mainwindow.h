@@ -16,8 +16,8 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_Build_clicked();
-    void ChosenRadio ();
+    void on_pushButton_Build_clicked(); // для карты
+    void ChosenRadio ();  // connect. не нужно три раза вызывать функцию для кнопки, а всё в одном
 
 private:
     Ui::MainWindow *ui;
