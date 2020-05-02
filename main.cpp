@@ -1,8 +1,9 @@
 #include <QtWidgets/QApplication>
 #include "mainwindow.h"
 #include <iostream>
-using namespace std;
 #include <QDebug>
+using namespace std;
+
 
 int main(int argc, char *argv[])
 {

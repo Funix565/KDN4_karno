@@ -17,10 +17,6 @@ public:
 
 private slots:
     void on_pushButton_Build_clicked();
-    void on_checkBox_2var_stateChanged(int arg1);
-
-    void on_pushButton_map_carno_clicked();
-
     void ChosenRadio ();
 
 private:
