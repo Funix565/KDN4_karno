@@ -1,5 +1,4 @@
-#include <QtGui/QApplication>
-//#include <QtWidgets/QApplication>
+#include <QtWidgets/QApplication>
 #include "mainwindow.h"
 #include <iostream>
 using namespace std;

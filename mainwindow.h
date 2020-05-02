@@ -21,6 +21,8 @@ private slots:
 
     void on_pushButton_map_carno_clicked();
 
+    void ChosenRadio ();
+
 private:
     Ui::MainWindow *ui;
 };
